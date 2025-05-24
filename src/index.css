@@ -79,4 +79,11 @@
       "rlig" 1,
       "calt" 1;
   }
+
+  /* Typography tweaks */
+  h1,
+  h2,
+  h3 {
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  }
 }

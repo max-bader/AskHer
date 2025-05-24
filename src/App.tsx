@@ -4,9 +4,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppProvider } from "@/contexts/AppContext";
-import { LavenderLayout } from "@/layouts/LavenderLayout";
+import { AskHerLayout } from "@/layouts/AskHerLayout";
 
 import Index from "./pages/Index";
+import AskQuestion from "./pages/AskQuestion";
 import Chatbot from "./pages/Chatbot";
 import Journal from "./pages/Journal";
 import Resources from "./pages/Resources";
@@ -23,18 +24,19 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <LavenderLayout>
+          <AskHerLayout>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/ask" element={<AskQuestion />} />
               <Route path="/chatbot" element={<Chatbot />} />
               <Route path="/journal" element={<Journal />} />
               <Route path="/resources" element={<Resources />} />
-              <Route path="/hotlines" element={<Hotlines />} />
+              <Route path="/herlight" element={<Hotlines />} />
               <Route path="/topics" element={<TopicExplorer />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </LavenderLayout>
+          </AskHerLayout>
         </BrowserRouter>
       </TooltipProvider>
     </AppProvider>

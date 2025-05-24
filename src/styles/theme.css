@@ -74,7 +74,7 @@
 
 /* Custom Card Styling */
 .card-lavender {
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   box-shadow: 0 4px 20px rgba(108, 90, 124, 0.1);
   transition: all 0.3s ease;
 }
@@ -84,15 +84,14 @@
   transform: translateY(-2px);
 }
 
-/* Pastel Button Styles */
+/* Button Styles */
 .button-lavender-primary {
-  background: linear-gradient(to right, #8a7c98, #6c5a7c);
+  background: #8a7c98;
   transition: all 0.3s ease;
 }
 
 .button-lavender-primary:hover {
-  background: linear-gradient(to right, #796a87, #5d4c6d);
-  box-shadow: 0 4px 12px rgba(108, 90, 124, 0.3);
+  background: #796a87;
 }
 
 .button-lavender-secondary {
@@ -116,4 +115,10 @@
 .subtitle-lavender {
   color: #8a7c98;
   font-weight: 500;
+}
+
+/* Misc */
+.heart-icon {
+  color: #e84393;
+  fill: #e84393;
 }

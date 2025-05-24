@@ -1,12 +1,4 @@
 import React, { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -87,25 +79,26 @@ const Chatbot = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-8 text-center">
-        <h1 className="text-4xl font-serif text-[#6c5a7c] mb-4">
+    <div className="container mx-auto px-4 py-6">
+      <div className="text-center py-10">
+        <h1 className="text-6xl font-serif text-[#6c5a7c] mb-4">
           Wisdom Companion
         </h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
           A growing garden of anonymous support and reflection. Explore advice,
           comfort, and <span className="text-pink-500">real</span> conversation
           with our AI companion.
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6">
-        <div className="md:w-1/4">
-          <Card className="bg-white shadow-sm border-0">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-[#6c5a7c] text-lg">Filters</CardTitle>
-            </CardHeader>
-            <CardContent>
+      <div className="max-w-4xl mx-auto">
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="md:w-1/4">
+            <div className="bg-white rounded-lg shadow-sm p-4">
+              <h2 className="text-[#6c5a7c] text-lg font-medium mb-4">
+                Filters
+              </h2>
+
               <div className="relative mb-4">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
@@ -128,130 +121,109 @@ const Chatbot = () => {
                   #worklife
                 </button>
               </div>
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+          </div>
 
-        <div className="md:w-3/4">
-          <Card className="bg-white shadow-sm border-0 h-[600px] flex flex-col">
-            <CardHeader className="bg-gradient-to-r from-[#f0e6fa] to-[#f9ecff] rounded-t-lg pb-3">
-              <CardTitle className="text-[#6c5a7c]">
-                AI Support Companion
-              </CardTitle>
-              <CardDescription>
-                I'm here to listen, support, and provide a safe space for you
-              </CardDescription>
-            </CardHeader>
+          <div className="md:w-3/4">
+            <div className="bg-white rounded-lg shadow-sm h-[600px] flex flex-col overflow-hidden">
+              <div className="px-6 py-4 bg-gradient-to-r from-[#f0e6fa] to-[#f9ecff] border-b border-[#e3d7f4]">
+                <h3 className="text-[#6c5a7c] font-medium">
+                  AI Support Companion
+                </h3>
+                <p className="text-sm text-gray-600">
+                  I'm here to listen, support, and provide a safe space for you
+                </p>
+              </div>
 
-            <CardContent className="flex-1 overflow-y-auto p-4 bg-[#fcf9ff]">
-              <div className="space-y-4">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex gap-3 ${message.sender === "user" ? "justify-end" : ""}`}
-                  >
-                    {message.sender === "ai" && (
+              <div className="flex-1 overflow-y-auto p-6 bg-[#fcf9ff]">
+                <div className="space-y-6">
+                  {messages.map((message) => (
+                    <div
+                      key={message.id}
+                      className={`flex gap-3 ${message.sender === "user" ? "justify-end" : ""}`}
+                    >
+                      {message.sender === "ai" && (
+                        <Avatar className="h-8 w-8 bg-[#f0e6fa]">
+                          <AvatarFallback className="text-[#6c5a7c] text-xs">
+                            AI
+                          </AvatarFallback>
+                        </Avatar>
+                      )}
+
+                      <div
+                        className={`rounded-lg p-3 max-w-[80%] shadow-sm ${
+                          message.sender === "user"
+                            ? "bg-[#f0e6fa] text-[#6c5a7c]"
+                            : "bg-white border border-[#e3d7f4] text-gray-800"
+                        }`}
+                      >
+                        <p className="text-sm">{message.content}</p>
+                      </div>
+
+                      {message.sender === "user" && (
+                        <Avatar className="h-8 w-8 bg-[#e3d7f4]">
+                          <AvatarFallback className="text-[#6c5a7c] text-xs">
+                            Me
+                          </AvatarFallback>
+                        </Avatar>
+                      )}
+                    </div>
+                  ))}
+
+                  {isTyping && (
+                    <div className="flex gap-3">
                       <Avatar className="h-8 w-8 bg-[#f0e6fa]">
                         <AvatarFallback className="text-[#6c5a7c] text-xs">
                           AI
                         </AvatarFallback>
                       </Avatar>
-                    )}
-
-                    <div
-                      className={`rounded-lg p-3 max-w-[80%] shadow-sm ${
-                        message.sender === "user"
-                          ? "bg-[#f0e6fa] text-[#6c5a7c]"
-                          : "bg-white border border-[#e3d7f4] text-gray-800"
-                      }`}
-                    >
-                      <p className="text-sm">{message.content}</p>
-                    </div>
-
-                    {message.sender === "user" && (
-                      <Avatar className="h-8 w-8 bg-[#e3d7f4]">
-                        <AvatarFallback className="text-[#6c5a7c] text-xs">
-                          Me
-                        </AvatarFallback>
-                      </Avatar>
-                    )}
-                  </div>
-                ))}
-
-                {isTyping && (
-                  <div className="flex gap-3">
-                    <Avatar className="h-8 w-8 bg-[#f0e6fa]">
-                      <AvatarFallback className="text-[#6c5a7c] text-xs">
-                        AI
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="bg-white rounded-lg p-3 border border-[#e3d7f4] w-16">
-                      <div className="flex gap-1">
-                        <div
-                          className="w-2 h-2 rounded-full bg-[#6c5a7c] animate-bounce opacity-70"
-                          style={{ animationDelay: "0ms" }}
-                        ></div>
-                        <div
-                          className="w-2 h-2 rounded-full bg-[#6c5a7c] animate-bounce opacity-70"
-                          style={{ animationDelay: "200ms" }}
-                        ></div>
-                        <div
-                          className="w-2 h-2 rounded-full bg-[#6c5a7c] animate-bounce opacity-70"
-                          style={{ animationDelay: "400ms" }}
-                        ></div>
+                      <div className="bg-white rounded-lg p-3 border border-[#e3d7f4] w-16">
+                        <div className="flex gap-1">
+                          <div
+                            className="w-2 h-2 rounded-full bg-[#6c5a7c] animate-bounce opacity-70"
+                            style={{ animationDelay: "0ms" }}
+                          ></div>
+                          <div
+                            className="w-2 h-2 rounded-full bg-[#6c5a7c] animate-bounce opacity-70"
+                            style={{ animationDelay: "200ms" }}
+                          ></div>
+                          <div
+                            className="w-2 h-2 rounded-full bg-[#6c5a7c] animate-bounce opacity-70"
+                            style={{ animationDelay: "400ms" }}
+                          ></div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-
-            <CardFooter className="border-t border-[#e3d7f4] p-4 bg-white">
-              <div className="flex w-full gap-2">
-                <Textarea
-                  placeholder="Type your message..."
-                  className="flex-1 min-h-[60px] resize-none border-[#e3d7f4] focus:border-[#6c5a7c]"
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                />
-                <Button
-                  onClick={handleSendMessage}
-                  className="bg-[#6c5a7c] hover:bg-[#5d4c6d] text-white"
-                  disabled={!inputMessage.trim() || isTyping}
-                >
-                  <SendHorizontal className="h-5 w-5" />
-                </Button>
+                  )}
+                </div>
               </div>
 
-              <div className="w-full flex justify-between mt-3 text-xs text-gray-500">
-                <p>Your conversations are private and anonymous</p>
-                <button className="flex items-center gap-1 hover:text-[#6c5a7c]">
-                  <Heart className="h-3 w-3" /> Send a heart
-                </button>
-              </div>
-            </CardFooter>
-          </Card>
+              <div className="p-4 border-t border-[#e3d7f4] bg-white">
+                <div className="flex gap-2">
+                  <Textarea
+                    placeholder="Type your message..."
+                    className="min-h-[60px] resize-none border-[#e3d7f4] focus:border-[#6c5a7c]"
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                  />
+                  <Button
+                    onClick={handleSendMessage}
+                    className="bg-[#6c5a7c] hover:bg-[#5d4c6d] text-white"
+                    disabled={!inputMessage.trim() || isTyping}
+                  >
+                    <SendHorizontal className="h-5 w-5" />
+                  </Button>
+                </div>
 
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[1, 2, 3].map((i) => (
-              <Card key={i} className="bg-white shadow-sm border-0">
-                <CardContent className="p-4">
-                  <div className="text-xs text-gray-500 mb-2">
-                    Someone said:
-                  </div>
-                  <p className="text-sm text-gray-700 mb-3">
-                    "{aiResponses[i + 2].substring(0, 70)}..."
-                  </p>
-                  <div className="flex justify-between text-xs">
-                    <button className="text-gray-500 hover:text-[#6c5a7c] flex items-center gap-1">
-                      <span>[Send a heart]</span>
-                    </button>
-                    <span className="text-gray-400">2 days ago</span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                <div className="flex justify-between mt-3 text-xs text-gray-500">
+                  <p>Your conversations are private and anonymous</p>
+                  <button className="flex items-center gap-1 hover:text-[#6c5a7c]">
+                    <Heart className="h-3 w-3" /> Send a heart
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
