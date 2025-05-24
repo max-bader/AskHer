@@ -9,9 +9,9 @@ import { AskHerLayout } from "@/layouts/AskHerLayout";
 import Index from "./pages/Index";
 import AskQuestion from "./pages/AskQuestion";
 import Chatbot from "./pages/Chatbot";
+import HerLight from "./pages/HerLight";
 import Journal from "./pages/Journal";
 import Resources from "./pages/Resources";
-import Hotlines from "./pages/Hotlines";
 import TopicExplorer from "./pages/TopicExplorer";
 import NotFound from "./pages/NotFound";
 
@@ -29,9 +29,9 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/ask" element={<AskQuestion />} />
               <Route path="/chatbot" element={<Chatbot />} />
+              <Route path="/herlight" element={<HerLight />} />
               <Route path="/journal" element={<Journal />} />
               <Route path="/resources" element={<Resources />} />
-              <Route path="/herlight" element={<Hotlines />} />
               <Route path="/topics" element={<TopicExplorer />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
