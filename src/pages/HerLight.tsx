@@ -23,7 +23,7 @@ const aiResponses = [
   "Sometimes we need to remember that we're all works in progress. What would be a gentler way to think about this?",
 ];
 
-const Chatbot = () => {
+const HerLight = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -88,7 +88,7 @@ const Chatbot = () => {
       <div className="max-w-3xl mx-auto">
         <div className="bg-[#f6ecff] rounded-lg p-8 min-h-[500px] flex flex-col">
           <div className="flex-1 overflow-y-auto mb-6">
-            {messages.map((message) => (
+            {messages.map((message, index) => (
               <div
                 key={message.id}
                 className={`mb-6 max-w-[80%] ${
@@ -135,4 +135,4 @@ const Chatbot = () => {
   );
 };
 
-export default Chatbot;
+export default HerLight;
