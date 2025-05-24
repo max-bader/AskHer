@@ -1,5 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+
+// Simple UUID generator function (replacement for uuid package)
+const generateId = () => {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};
 
 // Define types
 export type QuestionTone = "advice" | "listen" | "encouragement";
@@ -131,7 +139,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     return {
-      id: uuidv4(),
+      id: generateId(),
       points: 0,
       heartsReceived: 0,
       questionsAsked: 0,
@@ -164,7 +172,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   // Add a new question
   const addQuestion = (content: string, tone: QuestionTone, tags: string[]) => {
     const newQuestion: Question = {
-      id: uuidv4(),
+      id: generateId(),
       content,
       tone,
       createdAt: new Date(),
@@ -185,7 +193,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   // Add a response to a question
   const addResponse = (questionId: string, content: string) => {
     const newResponse: Response = {
-      id: uuidv4(),
+      id: generateId(),
       content,
       createdAt: new Date(),
       userId: user.id,
