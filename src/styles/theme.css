@@ -1,0 +1,124 @@
+/* Custom AskHer Theme Styles */
+
+:root {
+  /* Override default colors with softer pastel tones */
+  --primary: 270 25% 43%; /* Lavender purple */
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 270 50% 96%; /* Soft lavender */
+  --secondary-foreground: 270 25% 43%;
+
+  --accent: 330 100% 95%; /* Light pink */
+  --accent-foreground: 334 100% 35%;
+
+  --muted: 270 20% 95%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+
+  --card: 0 0% 100%; /* White */
+  --card-foreground: 224 71.4% 4.1%;
+
+  /* Custom colors */
+  --lavender-light: #f6ecff;
+  --lavender-medium: #e3d7f4;
+  --lavender-dark: #6c5a7c;
+  --pink-accent: #f8b4d9;
+}
+
+.dark {
+  /* Dark mode colors */
+  --primary: 270 25% 43%; /* Lavender purple */
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 270 20% 20%; /* Deep Purple */
+  --secondary-foreground: 0 0% 100%;
+
+  --accent: 334 50% 25%; /* Dark Pink */
+  --accent-foreground: 0 0% 100%;
+
+  --muted: 270 20% 20%;
+  --muted-foreground: 215 20.2% 75.1%;
+
+  --card: 222.2 84% 6.9%;
+  --card-foreground: 210 40% 98%;
+}
+
+/* Custom Animations */
+@keyframes gentle-pulse {
+  0% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes gentle-float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Gradient Background */
+.bg-gradient-lavender {
+  background-image: linear-gradient(to right bottom, #f6ecff, #f9f5ff);
+}
+
+/* Custom Card Styling */
+.card-lavender {
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 20px rgba(108, 90, 124, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card-lavender:hover {
+  box-shadow: 0 6px 25px rgba(108, 90, 124, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Button Styles */
+.button-lavender-primary {
+  background: #8a7c98;
+  transition: all 0.3s ease;
+}
+
+.button-lavender-primary:hover {
+  background: #796a87;
+}
+
+.button-lavender-secondary {
+  border: 1px solid #e3d7f4;
+  background-color: transparent;
+  color: #6c5a7c;
+  transition: all 0.3s ease;
+}
+
+.button-lavender-secondary:hover {
+  background-color: #f6ecff;
+  border-color: #d3c7e4;
+}
+
+/* Custom Font Styles */
+.title-lavender {
+  color: #6c5a7c;
+  font-weight: 600;
+}
+
+.subtitle-lavender {
+  color: #8a7c98;
+  font-weight: 500;
+}
+
+/* Misc */
+.heart-icon {
+  color: #e84393;
+  fill: #e84393;
+}
