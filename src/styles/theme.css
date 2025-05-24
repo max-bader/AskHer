@@ -2,56 +2,44 @@
 
 :root {
   /* Override default colors with softer pastel tones */
-  --primary: 334 100% 65%; /* Pink */
+  --primary: 270 25% 43%; /* Lavender purple */
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 262 83% 85%; /* Soft Purple */
-  --secondary-foreground: 262 83% 25%;
+  --secondary: 270 50% 96%; /* Soft lavender */
+  --secondary-foreground: 270 25% 43%;
 
-  --accent: 334 100% 95%; /* Light Pink */
+  --accent: 330 100% 95%; /* Light pink */
   --accent-foreground: 334 100% 35%;
 
-  --muted: 334 20% 95%;
+  --muted: 270 20% 95%;
   --muted-foreground: 215.4 16.3% 46.9%;
 
   --card: 0 0% 100%; /* White */
-  --card-foreground: 222.2 84% 4.9%;
+  --card-foreground: 224 71.4% 4.1%;
 
-  --sidebar-background: 334 80% 98%; /* Very Light Pink */
-  --sidebar-foreground: 334 80% 30%;
-  --sidebar-primary: 334 80% 60%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 334 80% 95%;
-  --sidebar-accent-foreground: 334 80% 30%;
-  --sidebar-border: 334 80% 90%;
-  --sidebar-ring: 334 80% 60%;
+  /* Custom colors */
+  --lavender-light: #f6ecff;
+  --lavender-medium: #e3d7f4;
+  --lavender-dark: #6c5a7c;
+  --pink-accent: #f8b4d9;
 }
 
 .dark {
   /* Dark mode colors */
-  --primary: 334 70% 60%; /* Deeper Pink */
+  --primary: 270 25% 43%; /* Lavender purple */
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 262 50% 40%; /* Deep Purple */
+  --secondary: 270 20% 20%; /* Deep Purple */
   --secondary-foreground: 0 0% 100%;
 
   --accent: 334 50% 25%; /* Dark Pink */
   --accent-foreground: 0 0% 100%;
 
-  --muted: 334 20% 20%;
+  --muted: 270 20% 20%;
   --muted-foreground: 215 20.2% 75.1%;
 
   --card: 222.2 84% 6.9%;
   --card-foreground: 210 40% 98%;
-
-  --sidebar-background: 334 50% 10%;
-  --sidebar-foreground: 334 80% 90%;
-  --sidebar-primary: 334 70% 50%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 334 50% 20%;
-  --sidebar-accent-foreground: 334 80% 90%;
-  --sidebar-border: 334 50% 20%;
-  --sidebar-ring: 334 70% 50%;
 }
 
 /* Custom Animations */
@@ -80,61 +68,52 @@
 }
 
 /* Gradient Background */
-.bg-gradient-askher {
-  background-image: linear-gradient(to right bottom, #fdf2f8, #fae8ff);
+.bg-gradient-lavender {
+  background-image: linear-gradient(to right bottom, #f6ecff, #f9f5ff);
 }
 
 /* Custom Card Styling */
-.card-askher {
+.card-lavender {
   border-radius: 1rem;
-  box-shadow: 0 4px 20px rgba(251, 182, 206, 0.1);
+  box-shadow: 0 4px 20px rgba(108, 90, 124, 0.1);
   transition: all 0.3s ease;
 }
 
-.card-askher:hover {
-  box-shadow: 0 6px 25px rgba(251, 182, 206, 0.2);
+.card-lavender:hover {
+  box-shadow: 0 6px 25px rgba(108, 90, 124, 0.2);
   transform: translateY(-2px);
 }
 
 /* Pastel Button Styles */
-.button-askher-primary {
-  background: linear-gradient(to right, #f472b6, #c084fc);
+.button-lavender-primary {
+  background: linear-gradient(to right, #8a7c98, #6c5a7c);
   transition: all 0.3s ease;
 }
 
-.button-askher-primary:hover {
-  background: linear-gradient(to right, #ec4899, #a855f7);
-  box-shadow: 0 4px 12px rgba(244, 114, 182, 0.3);
+.button-lavender-primary:hover {
+  background: linear-gradient(to right, #796a87, #5d4c6d);
+  box-shadow: 0 4px 12px rgba(108, 90, 124, 0.3);
 }
 
-.button-askher-secondary {
-  border: 1px solid #fbcfe8;
+.button-lavender-secondary {
+  border: 1px solid #e3d7f4;
   background-color: transparent;
-  color: #db2777;
+  color: #6c5a7c;
   transition: all 0.3s ease;
 }
 
-.button-askher-secondary:hover {
-  background-color: #fdf2f8;
-  border-color: #f9a8d4;
+.button-lavender-secondary:hover {
+  background-color: #f6ecff;
+  border-color: #d3c7e4;
 }
 
 /* Custom Font Styles */
-.title-askher {
-  color: #be185d;
+.title-lavender {
+  color: #6c5a7c;
   font-weight: 600;
 }
 
-.subtitle-askher {
-  color: #9d174d;
+.subtitle-lavender {
+  color: #8a7c98;
   font-weight: 500;
-}
-
-/* Badge Styles */
-.badge-askher {
-  background-color: #fce7f3;
-  color: #db2777;
-  font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 9999px;
 }
