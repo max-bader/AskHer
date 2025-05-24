@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,7 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Info, X } from "lucide-react";
+import { Info, X, Image, Link as LinkIcon, Tag as TagIcon } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -96,103 +94,99 @@ export const QuestionForm: React.FC = () => {
   const remainingChars = MAX_QUESTION_LENGTH - question.length;
 
   return (
-    <Card
-      className="w-full bg-white shadow-md border-pink-100"
-      id="question-form"
-    >
-      <CardHeader className="border-b border-pink-50">
-        <CardTitle className="text-lg text-pink-900">
-          Ask Your Question
-        </CardTitle>
-        <CardDescription>
-          Your question will be anonymous and shared with others who can provide
-          support
-        </CardDescription>
+    <Card className="bg-white shadow-sm border-0">
+      <CardHeader className="pb-0 pt-4">
+        <h2 className="text-lg font-medium">Create a post</h2>
       </CardHeader>
 
       <form onSubmit={handleSubmit}>
-        <CardContent className="space-y-4 pt-6">
+        <CardContent className="space-y-4">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-sm font-medium">Response Tone</span>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Info className="h-4 w-4 text-gray-400" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="text-xs">
+                    Select what type of responses you'd prefer to receive
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+
+          <Select
+            value={tone}
+            onValueChange={(value) => setTone(value as QuestionTone)}
+          >
+            <SelectTrigger className="w-full bg-gray-50 border-gray-200">
+              <SelectValue placeholder="Select tone" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="advice">
+                Advice - I'm looking for solutions
+              </SelectItem>
+              <SelectItem value="listen">
+                Just Listen - I need to be heard
+              </SelectItem>
+              <SelectItem value="encouragement">
+                Encouragement - I need support
+              </SelectItem>
+            </SelectContent>
+          </Select>
+
           <div className="space-y-2">
-            <label className="text-sm font-medium">
-              Your Question
-              <span className="text-xs text-muted-foreground ml-2">
-                ({remainingChars} characters remaining)
-              </span>
-            </label>
             <Textarea
               placeholder="What would you like to ask? Share your question here..."
-              className="min-h-[120px] resize-none"
+              className="min-h-[120px] resize-none bg-gray-50 border-gray-200"
               value={question}
               onChange={handleQuestionChange}
               maxLength={MAX_QUESTION_LENGTH}
               required
             />
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <label htmlFor="tone-selector" className="text-sm font-medium">
-                Response Tone
-              </label>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Info className="h-4 w-4 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Select what type of responses you'd prefer to receive</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+            <div className="flex justify-between text-xs text-gray-500">
+              <span>{remainingChars} characters remaining</span>
+              {isSuccess && (
+                <span className="text-green-600 font-medium">
+                  Your question has been submitted successfully!
+                </span>
+              )}
             </div>
-            <Select
-              value={tone}
-              onValueChange={(value) => setTone(value as QuestionTone)}
-            >
-              <SelectTrigger id="tone-selector">
-                <SelectValue placeholder="Select tone" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="advice">
-                  Advice - I'm looking for solutions
-                </SelectItem>
-                <SelectItem value="listen">
-                  Just Listen - I need to be heard
-                </SelectItem>
-                <SelectItem value="encouragement">
-                  Encouragement - I need support
-                </SelectItem>
-              </SelectContent>
-            </Select>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Tags (up to 5)</label>
-            <div className="flex gap-2 flex-wrap">
+          <div className="border border-gray-200 rounded-md p-2">
+            <div className="flex mb-2 text-sm text-gray-700">
+              <TagIcon className="h-4 w-4 mr-1" /> Tags (up to 5)
+            </div>
+
+            <div className="flex flex-wrap gap-2 mb-2">
               {tags.map((tag) => (
                 <Badge
                   key={tag}
                   variant="secondary"
-                  className="bg-pink-100 hover:bg-pink-200 text-pink-800"
+                  className="bg-gray-100 text-gray-700 rounded-md"
                 >
-                  {tag}
+                  #{tag}
                   <button
                     type="button"
                     onClick={() => handleRemoveTag(tag)}
-                    className="ml-1 hover:text-pink-950"
+                    className="ml-1 hover:text-gray-900"
                   >
                     <X className="h-3 w-3" />
                   </button>
                 </Badge>
               ))}
             </div>
+
             <div className="flex gap-2">
               <Input
                 placeholder="Add a tag (e.g., work, relationships)"
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                className="flex-1"
+                className="flex-1 bg-gray-50 border-gray-200"
                 disabled={tags.length >= MAX_TAGS}
               />
               <Button
@@ -200,7 +194,7 @@ export const QuestionForm: React.FC = () => {
                 variant="outline"
                 onClick={handleAddTag}
                 disabled={!tagInput.trim() || tags.length >= MAX_TAGS}
-                className="border-pink-200 hover:bg-pink-50"
+                className="border-gray-300"
               >
                 Add
               </Button>
@@ -208,20 +202,32 @@ export const QuestionForm: React.FC = () => {
           </div>
         </CardContent>
 
-        <CardFooter className="flex justify-between border-t border-pink-50 pt-4">
-          <div>
-            {isSuccess && (
-              <span className="text-sm text-green-600 font-medium">
-                Your question has been submitted successfully!
-              </span>
-            )}
+        <CardFooter className="flex justify-between border-t border-gray-200 pt-3 pb-4">
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="text-gray-500"
+            >
+              <Image className="h-4 w-4 mr-1" /> Images
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="text-gray-500"
+            >
+              <LinkIcon className="h-4 w-4 mr-1" /> Link
+            </Button>
           </div>
+
           <Button
             type="submit"
             disabled={!question.trim() || isSubmitting}
-            className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
+            className="bg-orange-500 hover:bg-orange-600 text-white"
           >
-            {isSubmitting ? "Submitting..." : "Submit Question"}
+            {isSubmitting ? "Posting..." : "Post"}
           </Button>
         </CardFooter>
       </form>
