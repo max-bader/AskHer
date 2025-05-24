@@ -1,26 +1,13 @@
 import React, { useState } from "react";
-import {
-  Search,
-  ArrowUp,
-  Calendar,
-  TrendingUp,
-  Sparkles,
-  Filter,
-} from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { QuestionCard } from "@/components/QuestionCard";
+import { Heart, Search, Filter } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
 
 const TopicExplorer = () => {
   const { publicQuestions } = useApp();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [sortOrder, setSortOrder] = useState<"popular" | "newest" | "trending">(
-    "popular",
-  );
 
   // Get all unique tags from public questions
   const allTags = Array.from(
@@ -44,18 +31,6 @@ const TopicExplorer = () => {
     return matchesSearch && matchesTags;
   });
 
-  // Sort questions based on selected order
-  const sortedQuestions = [...filteredQuestions].sort((a, b) => {
-    if (sortOrder === "newest") {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    } else if (sortOrder === "trending") {
-      return b.responses.length - a.responses.length;
-    } else {
-      // Default to popular (random for demo)
-      return Math.random() - 0.5;
-    }
-  });
-
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) =>
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
@@ -63,87 +38,44 @@ const TopicExplorer = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-2">Browse Topics</h1>
-        <p className="text-gray-600">
-          Explore the collective wisdom of our community
+    <div className="container mx-auto px-4 py-6">
+      <div className="text-center py-10">
+        <h1 className="text-6xl font-serif text-[#6c5a7c] mb-4">
+          Explore Topics
+        </h1>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          Browse the collective wisdom of our community by topic
         </p>
       </div>
 
-      <div className="bg-white rounded-md shadow-sm mb-6">
-        <div className="p-4">
-          <div className="relative mb-4">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+          <div className="relative mb-6">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
-              placeholder="Search by keyword or tag..."
-              className="pl-10 bg-gray-50 border-gray-200"
+              placeholder="Search the wall"
+              className="pl-10 bg-[#f9f5ff] border-[#e3d7f4]"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-6">
             <div className="flex items-center gap-2 mb-2">
-              <Filter className="h-4 w-4 text-gray-500" />
-              <span className="text-sm font-medium">Sort by</span>
-            </div>
-            <div className="flex gap-2">
-              <Button
-                variant={sortOrder === "popular" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSortOrder("popular")}
-                className={
-                  sortOrder === "popular"
-                    ? "bg-orange-500 hover:bg-orange-600"
-                    : ""
-                }
-              >
-                <ArrowUp className="h-4 w-4 mr-1" />
-                Popular
-              </Button>
-              <Button
-                variant={sortOrder === "newest" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSortOrder("newest")}
-                className={
-                  sortOrder === "newest"
-                    ? "bg-orange-500 hover:bg-orange-600"
-                    : ""
-                }
-              >
-                <Calendar className="h-4 w-4 mr-1" />
-                Newest
-              </Button>
-              <Button
-                variant={sortOrder === "trending" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSortOrder("trending")}
-                className={
-                  sortOrder === "trending"
-                    ? "bg-orange-500 hover:bg-orange-600"
-                    : ""
-                }
-              >
-                <TrendingUp className="h-4 w-4 mr-1" />
-                Trending
-              </Button>
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-sm font-medium">Popular tags</span>
+              <Filter className="h-4 w-4 text-[#6c5a7c]" />
+              <span className="text-sm font-medium text-[#6c5a7c]">
+                Tags | Filters
+              </span>
             </div>
             <div className="flex flex-wrap gap-2">
               {allTags.map((tag) => (
                 <Badge
                   key={tag}
                   variant={selectedTags.includes(tag) ? "default" : "outline"}
-                  className={`cursor-pointer rounded-md ${
+                  className={`cursor-pointer ${
                     selectedTags.includes(tag)
-                      ? "bg-orange-500 hover:bg-orange-600"
-                      : "hover:bg-gray-100"
+                      ? "bg-[#6c5a7c] hover:bg-[#5d4c6d]"
+                      : "border-[#e3d7f4] text-[#6c5a7c] hover:bg-[#f9f5ff]"
                   }`}
                   onClick={() => toggleTag(tag)}
                 >
@@ -153,31 +85,61 @@ const TopicExplorer = () => {
             </div>
           </div>
         </div>
-      </div>
 
-      {sortedQuestions.length > 0 ? (
-        <div className="space-y-4">
-          {sortedQuestions.map((question) => (
-            <QuestionCard
-              key={question.id}
-              question={question}
-              showResponseForm={false}
-            />
-          ))}
-        </div>
-      ) : (
-        <Card className="bg-white border-0 shadow-sm">
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <Sparkles className="h-12 w-12 text-orange-300 mb-3" />
-            <h3 className="text-lg font-medium mb-1">No results found</h3>
-            <p className="text-gray-500 text-center max-w-md">
+        {filteredQuestions.length > 0 ? (
+          <div className="space-y-6">
+            {filteredQuestions.map((question) => (
+              <div
+                key={question.id}
+                className="bg-white rounded-lg shadow-sm p-6"
+              >
+                <div className="text-sm text-gray-500 mb-2">Someone said:</div>
+                <p className="text-lg mb-3">"{question.content}"</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {question.tags.map((tag) => (
+                    <span key={tag} className="text-xs text-[#6c5a7c]">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+
+                {question.responses.length > 0 && (
+                  <div className="border-l-4 border-[#e3d7f4] pl-4 py-2 my-4 bg-[#fcf9ff]">
+                    <p className="text-gray-700">
+                      » {question.responses[0].content}
+                    </p>
+                  </div>
+                )}
+
+                <div className="flex justify-between items-center text-sm text-gray-500 mt-4">
+                  <div>
+                    {question.tags.map((tag, i) => (
+                      <span key={i}>
+                        {i > 0 && " "}#{tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex items-center">
+                    <Heart className="h-4 w-4 text-red-500 mr-1" />
+                    <span>
+                      {Math.floor(Math.random() * 80) + 10} people found this
+                      comforting
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white rounded-lg shadow-sm p-6 text-center">
+            <p className="text-gray-500">
               {searchQuery || selectedTags.length > 0
-                ? "Try adjusting your search filters to find what you're looking for"
+                ? "No questions match your search filters"
                 : "No questions have been shared to the Wisdom Wall yet"}
             </p>
-          </CardContent>
-        </Card>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
