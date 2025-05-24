@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppProvider } from "@/contexts/AppContext";
-import { MainLayout } from "@/layouts/MainLayout";
+import { RedditLayout } from "@/layouts/RedditLayout";
 
 import Index from "./pages/Index";
 import Chatbot from "./pages/Chatbot";
@@ -23,7 +23,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <MainLayout>
+          <RedditLayout>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/chatbot" element={<Chatbot />} />
@@ -34,7 +34,7 @@ const App = () => (
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </MainLayout>
+          </RedditLayout>
         </BrowserRouter>
       </TooltipProvider>
     </AppProvider>
