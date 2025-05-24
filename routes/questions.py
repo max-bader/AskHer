@@ -39,8 +39,7 @@ def create_question(question: QuestionCreate):
         return {
             "message": "Question created successfully.",
             "status_code": res.status_code
-        }
-
+            }
 
 @router.get("/my/questions")
 def get_my_questions(user_id: str = Query(...)):
