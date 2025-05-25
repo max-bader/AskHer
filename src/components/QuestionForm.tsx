@@ -28,13 +28,18 @@ import { useApp, QuestionTone } from "@/contexts/AppContext";
 const MAX_QUESTION_LENGTH = 500;
 const MAX_TAGS = 5;
 
-export const QuestionForm: React.FC = () => {
+interface QuestionFormProps {
+  onSubmit?: (response: any) => void;
+}
+
+export const QuestionForm = ({ onSubmit }: QuestionFormProps) => {
   const [question, setQuestion] = useState("");
   const [tone, setTone] = useState<QuestionTone>("advice");
   const [tagInput, setTagInput] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { addQuestion } = useApp();
 
@@ -66,29 +71,41 @@ export const QuestionForm: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     if (!question.trim()) return;
+    
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch('http://127.0.0.1:8000/questions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: 'user-123',
+          content: question,
+          tone: 'advice'
+        }),
+      });
 
-    setIsSubmitting(true);
-
-    // Submit the question to the context
-    addQuestion(question, tone, tags);
-
-    // Show success message and reset form
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSuccess(true);
-      setQuestion("");
-      setTone("advice");
-      setTags([]);
-
-      // Hide success message after 3 seconds
-      setTimeout(() => {
-        setIsSuccess(false);
-      }, 3000);
-    }, 1000);
+      const data = await response.json();
+      console.log('Response:', data);
+      
+      // Clear the input
+      setQuestion('');
+      
+      // Call the onSubmit callback if provided
+      if (onSubmit) {
+        onSubmit(data);
+      }
+    } catch (error) {
+      console.error('Error submitting question:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const remainingChars = MAX_QUESTION_LENGTH - question.length;
@@ -145,6 +162,7 @@ export const QuestionForm: React.FC = () => {
               onChange={handleQuestionChange}
               maxLength={MAX_QUESTION_LENGTH}
               required
+              disabled={isLoading}
             />
             <div className="flex justify-between text-xs text-gray-500">
               <span>{remainingChars} characters remaining</span>
@@ -224,10 +242,10 @@ export const QuestionForm: React.FC = () => {
 
           <Button
             type="submit"
-            disabled={!question.trim() || isSubmitting}
-            className="bg-orange-500 hover:bg-orange-600 text-white"
+            disabled={!question.trim() || isLoading}
+            className="bg-purple-600 hover:bg-purple-700 text-white"
           >
-            {isSubmitting ? "Posting..." : "Post"}
+            {isLoading ? 'Sending...' : 'AskHer'}
           </Button>
         </CardFooter>
       </form>
