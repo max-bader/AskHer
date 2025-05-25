@@ -114,9 +114,16 @@ const Journal = () => {
     <div className="min-h-screen bg-[#F5DCF7]">
       <div className="container mx-auto px-4 py-6">
         <div className="text-center py-6">
-          <h1 className="text-[72px] font-['DM_Sans'] font-bold text-[#856787] leading-none mb-8">
-            Personal Journal
-          </h1>
+          <div className="flex items-center justify-center gap-8 mb-8">
+            <img
+              src="/image3.png"
+              alt="Decorative illustration"
+              className="w-32 h-32 object-contain"
+            />
+            <h1 className="text-[72px] font-['DM_Sans'] font-bold text-[#856787] leading-none">
+              Personal Journal
+            </h1>
+          </div>
           <p className="text-xl font-['DM_Sans'] text-gray-600 max-w-3xl mx-auto mb-2">
             A private space to reflect on your thoughts and feelings.
           </p>

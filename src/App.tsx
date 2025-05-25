@@ -7,6 +7,7 @@ import HerLight from "@/pages/HerLight";
 import Journal from "@/pages/Journal";
 import Resources from "@/pages/Resources";
 import AskQuestion from "@/pages/AskQuestion";
+import Login from "@/pages/Login";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/herlight" element={<HerLight />} />
           <Route path="/journal" element={<Journal />} />
           <Route path="/resources" element={<Resources />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
     </Router>

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { ArrowRight } from "lucide-react";
 
 const AskQuestion: React.FC = () => {
@@ -33,12 +32,20 @@ const AskQuestion: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#F5DCF7]">
-      <div className="container mx-auto px-4 pt-16 flex flex-col items-center">
-        <div className="max-w-3xl w-full text-center">
-          <h1 className="text-7xl font-['DM_Sans'] font-bold text-[#856787] mb-6">
-            Ask a Question
-          </h1>
-          <div className="space-y-2 mb-12">
+      <div className="container mx-auto px-4 pt-16">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex items-center justify-center gap-8 mb-12">
+            <img
+              src="/image2.png"
+              alt="Decorative illustration"
+              className="w-32 h-32 object-contain"
+            />
+            <h1 className="text-7xl font-['DM_Sans'] font-bold text-[#856787]">
+              Ask a Question
+            </h1>
+          </div>
+          
+          <div className="text-center space-y-2 mb-12">
             <p className="text-2xl text-[#856787] font-['DM_Sans']">
               Take a breath. You're safe here.
             </p>
@@ -67,7 +74,7 @@ const AskQuestion: React.FC = () => {
             </div>
           </form>
 
-          <div className="mt-20">
+          <div className="mt-16">
             <h2 className="text-4xl font-['DM_Sans'] text-[#856787] mb-8">
               Today's Light
             </h2>
