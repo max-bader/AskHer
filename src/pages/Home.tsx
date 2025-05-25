@@ -118,105 +118,98 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#F5DCF7]">
-      {/* Nav */}
-      <nav className="bg-white py-4 px-6 flex justify-between items-center border-b">
-        <div className="text-2xl font-bold">AskHer</div>
-        <div className="flex space-x-6">
-          {["Home", "Ask a Question", "HerLight", "Journal", "Resources"].map((label) => (
-            <a key={label} href="#" className="text-gray-600 hover:text-gray-900">
-              {label}
-            </a>
-          ))}
+      <div className="container mx-auto px-4 py-16">
+        <div className="text-center mb-16">
+          <h1 className="text-[72px] leading-[80px] font-['DM_Sans'] font-bold text-[#856787] mb-4">
+            Wisdom
+            <br />
+            Wall
+          </h1>
+          <p className="text-xl font-['DM_Sans'] text-gray-600 mb-2">
+            A growing garden of anonymous support and reflection.
+          </p>
+          <p className="text-xl font-['DM_Sans'] text-gray-600">
+            Explore advice, comfort, and <span className="text-[#856787]">real</span> stories left by others
+          </p>
         </div>
-        <div className="flex space-x-4">
-          <a href="#" className="text-gray-600 hover:text-gray-900">
-            Login
-          </a>
-          <Button className="bg-[#8a7c98] hover:bg-[#796a87] text-white">
-            Sign Up
-          </Button>
-        </div>
-      </nav>
 
-      {/* Header */}
-      <div className="container mx-auto px-4 py-8 text-center">
-        <h1 className="text-8xl font-['DM_Sans'] text-[#6c5a7c] mb-8">Wisdom Wall</h1>
-        <p className="text-xl text-gray-600">A growing garden of anonymous support and reflection.</p>
-        <p className="text-xl text-gray-600 mb-8">
-          Explore advice, comfort, and <span className="text-[#856787]">real</span> stories left by others
-        </p>
-
-        {/* Search & Buttons */}
+        {/* Search & Filters */}
         <div className="flex justify-center items-center gap-4 mb-12">
-          <div className="relative w-96">
-            <Input placeholder="Search the wall" className="pl-4 pr-10" />
-            <button className="absolute right-3 top-1/2 -translate-y-1/2">🔍</button>
+          <div className="w-96">
+            <Input 
+              placeholder="Search the wall" 
+              className="bg-white/50 border-none rounded-md shadow-sm h-12 font-['DM_Sans']" 
+            />
           </div>
-          <Button variant="outline" className="border-[#e3d7f4] text-[#856787]">
+          <Button variant="outline" className="bg-white/50 border-none h-12 rounded-md shadow-sm font-['DM_Sans']">
             Tags | Filters <ChevronDown className="ml-2 h-4 w-4" />
-          </Button>
-          <Button className="bg-[#856787] hover:bg-[#6c5a7c] text-white">
-            ComfortHer <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
 
         {/* Posts */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {posts.map((post) => (
-            <div key={post.id} className="bg-white rounded-lg p-6 shadow-sm border border-[#e3d7f4]">
-              <p className="text-gray-500 mb-2">Someone {post.id === "1" ? "wrote" : "said"}:</p>
-              <p className="text-lg mb-4">"{post.content}"</p>
+        <div className="grid grid-cols-2 gap-6 max-w-6xl mx-auto">
+          {posts.map((post, index) => (
+            <div 
+              key={post.id} 
+              style={{
+                gridColumn: index % 2 === 0 ? '1' : '2',
+                gridRow: showCommentInput[post.id] ? `span 2` : 'span 1'
+              }}
+              className={`
+                relative border-4 border-[#E5D0E6] rounded-3xl overflow-hidden shadow-md
+                ${showCommentInput[post.id] ? 'pb-0' : ''} 
+                h-fit
+              `}
+            >
+              <div className="bg-[#F3EEEA] p-6">
+                <p className="text-gray-600 mb-4 font-['DM_Sans']">Someone {post.id === "1" ? "wrote" : "said"}:</p>
+                <p className="text-lg mb-6 font-['DM_Sans']">"{post.content}"</p>
 
-              {/* Actions */}
-              <div className="flex justify-between items-center text-sm text-gray-500 mb-4">
-                <div className="flex space-x-2">
-                  <button className="hover:text-[#856787]">[ Send a heart ]</button>
+                {/* Actions */}
+                <div className="flex items-center gap-4 mb-0">
+                  <button className="flex items-center gap-1 text-[#856787] bg-[#F5DCF7] px-3 py-1 rounded-full">
+                    <Heart className="h-4 w-4" />
+                    <span>{post.hearts}</span>
+                  </button>
                   <button
                     onClick={() => toggleCommentInput(post.id)}
-                    className="hover:text-[#856787]"
+                    className="flex items-center gap-1 text-[#856787] bg-[#F5DCF7] px-3 py-1 rounded-full"
                   >
-                    [ Comment ] ({post.comments.length})
+                    <span>💬</span>
+                    <span>{post.comments.length}</span>
                   </button>
-                </div>
-                <div className="flex items-center">
-                  {post.hashtag && <span className="mr-2">#{post.hashtag}</span>}
-                  <span>Sent {post.timestamp} | </span>
-                  <Heart className="h-4 w-4 ml-1 text-[#856787]" />
-                  <span className="ml-1">{post.hearts}</span>
+                  {post.hashtag && (
+                    <span className="text-[#856787] ml-2">#{post.hashtag}</span>
+                  )}
+                  <span className="text-gray-500 ml-auto">Sent {post.timestamp}</span>
                 </div>
               </div>
 
               {/* Comment Input & List */}
               {showCommentInput[post.id] && (
-                <div className="mt-4 border-t border-[#e3d7f4] pt-4">
-                  <div className="flex gap-2 mb-4">
-                    <Input
-                      placeholder="Share your thoughts..."
-                      value={newComments[post.id] || ""}
-                      onChange={(e) =>
-                        setNewComments((prev) => ({ ...prev, [post.id]: e.target.value }))
+                <div className="bg-[#E5D0E6] p-6">
+                  <Input
+                    placeholder="Comment, comfort, or connect"
+                    value={newComments[post.id] || ""}
+                    onChange={(e) =>
+                      setNewComments((prev) => ({ ...prev, [post.id]: e.target.value }))
+                    }
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleAddComment(post.id);
                       }
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          handleAddComment(post.id);
-                        }
-                      }}
-                    />
-                    <Button onClick={() => handleAddComment(post.id)} className="px-3 bg-[#856787] hover:bg-[#6c5a7c]">
-                      <Send className="h-4 w-4 text-white" />
-                    </Button>
-                  </div>
+                    }}
+                    className="bg-white/80 border-none rounded-full mb-4 font-['DM_Sans']"
+                  />
                   <div className="space-y-3">
                     {post.comments.map((c) => (
-                      <div key={c.id} className="bg-[#f9f5fb] rounded-md p-3">
-                        <p className="text-gray-700">{c.content}</p>
-                        <div className="flex justify-between items-center text-xs text-gray-500 mt-2">
-                          <span>Anonymous • {c.timestamp}</span>
-                          <div className="flex items-center gap-1">
-                            <Heart className="h-3 w-3 text-[#856787]" />
-                            <span>{c.hearts}</span>
-                          </div>
+                      <div key={c.id} className="flex items-start gap-2">
+                        <div className="w-8 h-8 rounded-full bg-[#856787] flex items-center justify-center text-white text-sm">
+                          {c.author.charAt(0)}
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-gray-700 font-['DM_Sans']">{c.content}</p>
                         </div>
                       </div>
                     ))}
