@@ -184,15 +184,22 @@ const Resources = () => {
     <div className="min-h-screen bg-[#F5DCF7]">
       <div className="container mx-auto px-4 py-6">
         <div className="text-center py-6">
-          <h1 className="text-[72px] font-['DM_Sans'] font-bold text-[#856787] leading-none mb-8">
-            Resources
-          </h1>
+          <div className="flex items-center justify-center gap-8 mb-8">
+            <img
+              src="/image4.png"
+              alt="Decorative illustration"
+              className="w-32 h-32 object-contain"
+            />
+            <h1 className="text-[72px] font-['DM_Sans'] font-bold text-[#856787] leading-none">
+              Resources
+            </h1>
+          </div>
           <p className="text-xl font-['DM_Sans'] text-gray-600 max-w-3xl mx-auto mb-12">
-            Helpful resources and information to support your journey
+            Curated resources and tools to support your journey
           </p>
         </div>
 
-        <Tabs defaultValue="resources" className="w-full">
+        <Tabs defaultValue="resources" className="space-y-4">
           <TabsList className="bg-[#f3d4f7] font-['DM_Sans']">
             <TabsTrigger value="resources" className="text-[#856787] data-[state=active]:bg-white">Resources</TabsTrigger>
             <TabsTrigger value="faq" className="text-[#856787] data-[state=active]:bg-white">FAQ</TabsTrigger>
