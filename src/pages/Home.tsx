@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronDown, Heart, ArrowRight, Send } from "lucide-react";
+import SimpleQuestionForm from "@/components/SimpleQuestionForm";
 
 interface Comment {
   id: string;
@@ -88,6 +89,52 @@ const Home: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>(initialPosts);
   const [newComments, setNewComments] = useState<{ [postId: string]: string }>({});
   const [showCommentInput, setShowCommentInput] = useState<{ [postId: string]: boolean }>({});
+  const [likedPosts, setLikedPosts] = useState<string[]>(() => {
+    const saved = localStorage.getItem("likedPosts");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("likedPosts", JSON.stringify(likedPosts));
+  }, [likedPosts]);
+
+  useEffect(() => {
+    // Fetch posts from backend and merge with initialPosts
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/questions");
+        if (!response.ok) {
+          throw new Error('Failed to fetch questions');
+        }
+        const data = await response.json();
+        console.log('Fetched questions from backend:', data);
+        
+        // Map backend data to Post shape
+        const mapped = data.map((q: any) => ({
+          id: q.id,
+          content: q.content,
+          hearts: q.hearts || 0,
+          timestamp: q.created_at ? new Date(q.created_at).toLocaleDateString() : "Just now",
+          hashtag: q.hashtag,
+          comments: q.comments || [],
+        }));
+
+        // Merge initialPosts and mapped, avoiding duplicates by id
+        const allPosts = [...initialPosts];
+        mapped.forEach((post: Post) => {
+          if (!allPosts.some((p) => p.id === post.id)) {
+            allPosts.push(post);
+          }
+        });
+        setPosts(allPosts);
+      } catch (error) {
+        console.error('Error fetching questions:', error);
+        setPosts(initialPosts);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   const toggleCommentInput = (postId: string) => {
     setShowCommentInput((prev) => ({
@@ -116,6 +163,60 @@ const Home: React.FC = () => {
     setNewComments((prev) => ({ ...prev, [postId]: "" }));
   };
 
+  const handleNewPost = (newPost: any, submittedContent: string) => {
+    const post = Array.isArray(newPost) ? newPost[0] : newPost;
+    setPosts(prev => [
+      {
+        id: post.id || `${Date.now()}`,
+        content: submittedContent,
+        hearts: 0,
+        timestamp: "Just now",
+        hashtag: post.hashtag,
+        comments: [],
+      },
+      ...prev,
+    ]);
+  };
+
+  const handleUpvote = async (postId: string) => {
+    if (likedPosts.includes(postId)) {
+      // Unlike: remove from likedPosts and decrement hearts
+      setLikedPosts(prev => {
+        const updated = prev.filter(id => id !== postId);
+        localStorage.setItem("likedPosts", JSON.stringify(updated));
+        return updated;
+      });
+      setPosts(prev =>
+        prev.map(post =>
+          post.id === postId ? { ...post, hearts: Math.max(0, post.hearts - 1) } : post
+        )
+      );
+      // Optionally: send a request to backend to remove upvote if you have such an endpoint
+      // await fetch(`http://127.0.0.1:8000/responses/${postId}/unupvote`, { ... });
+    } else {
+      // Like: add to likedPosts and increment hearts
+      setLikedPosts(prev => {
+        const updated = [...prev, postId];
+        localStorage.setItem("likedPosts", JSON.stringify(updated));
+        return updated;
+      });
+      setPosts(prev =>
+        prev.map(post =>
+          post.id === postId ? { ...post, hearts: post.hearts + 1 } : post
+        )
+      );
+      try {
+        await fetch(`http://127.0.0.1:8000/responses/${postId}/upvote`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: 'ef02a2e7-dd66-477e-b1ec-5413f7c58e7a' }),
+        });
+      } catch (error) {
+        console.error('Failed to upvote:', error);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#F5DCF7]">
       <div className="container mx-auto px-4 py-16">
@@ -132,20 +233,6 @@ const Home: React.FC = () => {
             Explore advice, comfort, and <span className="text-[#856787]">real</span> stories left by others
           </p>
         </div>
-
-        {/* Search & Filters */}
-        <div className="flex justify-center items-center gap-4 mb-12">
-          <div className="w-96">
-            <Input 
-              placeholder="Search the wall" 
-              className="bg-white/50 border-none rounded-md shadow-sm h-12 font-['DM_Sans']" 
-            />
-          </div>
-          <Button variant="outline" className="bg-white/50 border-none h-12 rounded-md shadow-sm font-['DM_Sans']">
-            Tags | Filters <ChevronDown className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-
         {/* Posts */}
         <div className="grid grid-cols-2 gap-6 max-w-6xl mx-auto">
           {posts.map((post, index) => (
@@ -167,8 +254,15 @@ const Home: React.FC = () => {
 
                 {/* Actions */}
                 <div className="flex items-center gap-4 mb-0">
-                  <button className="flex items-center gap-1 text-[#856787] bg-[#F5DCF7] px-3 py-1 rounded-full">
-                    <Heart className="h-4 w-4" />
+                  <button
+                    onClick={() => handleUpvote(post.id)}
+                    className={`flex items-center gap-1 px-3 py-1 rounded-full
+                      ${likedPosts.includes(post.id)
+                        ? 'bg-pink-200 text-pink-600'
+                        : 'bg-[#F5DCF7] text-[#856787]'}
+                    `}
+                  >
+                    <Heart className={`h-4 w-4 ${likedPosts.includes(post.id) ? 'fill-pink-600' : ''}`} />
                     <span>{post.hearts}</span>
                   </button>
                   <button

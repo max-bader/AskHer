@@ -151,3 +151,9 @@ dist
 *.njsproj
 *.sln
 *.sw?
+.env
+__pycache__/
+*.pyc
+
+__pycache__/
+*.pyc

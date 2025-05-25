@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import * as React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { ArrowRight } from "lucide-react";
 
 const AskQuestion: React.FC = () => {
@@ -15,16 +17,30 @@ const AskQuestion: React.FC = () => {
     setIsSubmitting(true);
     
     try {
-      // TODO: Implement API call to save question
-      console.log("Question submitted:", question);
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Navigate back to home
+      const response = await fetch('http://127.0.0.1:8000/questions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: 'ef02a2e7-dd66-477e-b1ec-5413f7c58e7a',
+          content: question.trim(),
+          tone: 'advice'
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to submit question');
+      }
+
+      const data = await response.json();
+      setQuestion("");
+      alert("Your question has been posted to the Wisdom Wall!");
       navigate("/");
     } catch (error) {
       console.error("Error submitting question:", error);
+      alert("Failed to submit question. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -32,52 +48,36 @@ const AskQuestion: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#F5DCF7]">
-      <div className="container mx-auto px-4 pt-16">
-        <div className="max-w-3xl mx-auto">
-          <div className="flex items-center justify-center gap-8 mb-12">
-            <img
-              src="/image2.png"
-              alt="Decorative illustration"
-              className="w-32 h-32 object-contain"
-            />
-            <h1 className="text-7xl font-['DM_Sans'] font-bold text-[#856787]">
-              Ask a Question
-            </h1>
-          </div>
-          
-          <div className="text-center space-y-2 mb-12">
-            <p className="text-2xl text-[#856787] font-['DM_Sans']">
-              Take a breath. You're safe here.
-            </p>
-            <p className="text-2xl text-[#856787] font-['DM_Sans']">
-              Ask what's on your mind or heart <span className="text-[#856787]">❤</span>
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="w-full">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                placeholder="What's weighing on you today?"
-                className="flex-1 px-4 py-3 rounded-lg border-4 border-[#E5D0E6] bg-white font-['DM_Sans'] text-lg focus:outline-none focus:border-[#856787] shadow-sm"
-              />
-              <Button
-                type="submit"
-                disabled={!question.trim() || isSubmitting}
-                className="bg-[#856787] hover:bg-[#6d566e] text-white px-6 py-2 rounded-lg font-['DM_Sans'] flex items-center gap-2"
-              >
-                AskHer
-                <ArrowRight className="h-5 w-5" />
-              </Button>
+      <div className="container mx-auto px-4 py-0">
+        <div className="flex flex-col items-center pt-16">
+          <div className="flex flex-col items-center w-full max-w-2xl">
+            <div className="flex flex-row items-center w-full justify-center mb-8">
+              <img src="/image2.png" alt="Bear" className="w-24 h-24 mr-6" style={{marginTop: '-32px'}} />
+              <div className="flex flex-col flex-1">
+                <h1 className="text-[64px] leading-[72px] font-['DM_Sans'] font-bold text-[#856787] mb-2 text-left">Ask a Question</h1>
+                <p className="text-lg font-['DM_Sans'] text-[#856787] mb-2 text-left">Take a breath. You're safe here.<br />Ask what's on your mind or heart <span className="text-[#856787]">♥</span></p>
+                <form onSubmit={handleSubmit} className="flex flex-row items-center w-full mt-4">
+                  <input
+                    type="text"
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    placeholder="What's weighing on you today?"
+                    className="flex-1 p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white/80 text-lg mr-2"
+                    disabled={isSubmitting}
+                  />
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting || !question.trim()}
+                    className="px-6 py-3 bg-[#BFA2DB] text-white rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed text-lg font-semibold shadow-none"
+                  >
+                    {isSubmitting ? 'Sending...' : <span className="flex items-center">AskHer <ArrowRight className="ml-2 w-5 h-5" /></span>}
+                  </Button>
+                </form>
+              </div>
             </div>
-          </form>
-
-          <div className="mt-16">
-            <h2 className="text-4xl font-['DM_Sans'] text-[#856787] mb-8">
-              Today's Light
-            </h2>
+          </div>
+          <div className="w-full max-w-2xl mt-8">
+            <h2 className="text-3xl font-['DM_Sans'] text-[#856787] mb-4 text-left">Today's Light</h2>
             <div className="bg-[#F3EEEA] rounded-xl p-6 shadow-sm border-4 border-[#E5D0E6] text-left">
               <p className="text-xl mb-4">
                 "How do I stop shrinking myself in rooms full of men?"
