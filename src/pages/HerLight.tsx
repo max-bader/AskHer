@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import axios from "axios";
 
 interface Message {
   id: string;
@@ -28,6 +29,8 @@ const HerLight = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom of messages when new messages are added
@@ -35,8 +38,8 @@ const HerLight = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleSendMessage = () => {
-    if (!inputMessage.trim()) return;
+  const handleSendMessage = async () => {
+    if (!inputMessage.trim() || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -48,20 +51,35 @@ const HerLight = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInputMessage("");
     setIsExpanded(true);
+    setIsLoading(true);
 
-    setTimeout(() => {
-      const randomResponse =
-        aiResponses[Math.floor(Math.random() * aiResponses.length)];
+    try {
+      const response = await axios.post("http://localhost:8000/chatbot/chat", {
+        message: userMessage.content,
+        session_id: sessionId
+      });
 
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: randomResponse,
+        content: response.data.response,
         sender: "ai",
         timestamp: new Date(),
       };
 
+      setSessionId(response.data.session_id);
       setMessages((prev) => [...prev, aiMessage]);
-    }, 1000);
+    } catch (error) {
+      console.error("Error sending message:", error);
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: "I apologize, but I'm having trouble connecting right now. Please try again in a moment.",
+        sender: "ai",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -96,9 +114,10 @@ const HerLight = () => {
               />
               <Button
                 onClick={handleSendMessage}
+                disabled={isLoading}
                 className="bg-[#8a7c98] hover:bg-[#796a87] text-white rounded-lg px-6 h-12 font-['DM_Sans']"
               >
-                Share
+                {isLoading ? "Sending..." : "Share"}
               </Button>
             </div>
           ) : (
@@ -137,12 +156,14 @@ const HerLight = () => {
                       handleSendMessage();
                     }
                   }}
+                  disabled={isLoading}
                 />
                 <Button
                   onClick={handleSendMessage}
+                  disabled={isLoading}
                   className="bg-[#8a7c98] hover:bg-[#796a87] text-white rounded-lg px-6 h-10 font-['DM_Sans']"
                 >
-                  Send
+                  {isLoading ? "Sending..." : "Send"}
                 </Button>
               </div>
             </div>

@@ -65,10 +65,31 @@ def get_upvotes_for_response(id: str):
 def create_comment(id: str, comment: CommentCreate):
     comment_data = comment.dict()
     comment_data["response_id"] = id
+
     res = client.post("/comments", json=comment_data)
+
+    # Debug and fail gracefully if the response isn't as expected
     if res.status_code != 201:
-        return {"error": res.text}
-    return res.json()
+        print("❌ Failed to create comment")
+        print("Status Code:", res.status_code)
+        print("Response Text:", res.text)
+        print("Payload Sent:", comment_data)
+        return {
+            "error": "Failed to create comment",
+            "status_code": res.status_code,
+            "response": res.text
+        }
+
+    try:
+        return res.json()
+    except Exception as e:
+        print("❌ JSON parsing failed")
+        print("Raw response:", res.text)
+        return {
+            "error": "Failed to parse response from Supabase",
+            "detail": str(e)
+        }
+
 
 # retrieving comment // GET
 @router.get("/responses/{id}/comments")
